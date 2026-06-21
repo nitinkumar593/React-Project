@@ -20,7 +20,16 @@ export async function weatherApi(city){
     let weatherRes = await axios.get(WEATHER_URL);
     let data = weatherRes.data;
 
-    return data;
+    let FORECAST_URL = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`;
+
+    let forecastRes = await axios.get(FORECAST_URL);
+    let forecastData = forecastRes.data; 
+
+    return {
+        current : data,
+        forecast : forecastData
+    }
+
    } catch (error) {
         throw error;
    }
