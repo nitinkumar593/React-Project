@@ -3,25 +3,26 @@ import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 
 export default function Forecast({ forecastInfo }) {
+
+    let data = forecastInfo.weather;
+
     return (
-        <div>
-            
-            <Card sx={{ minWidth: 275 }}>
-                <CardContent>
-                    <Typography>
+        <Card sx={{ minWidth: 200 }}>
+            <CardContent>
 
-                    </Typography>
-                    <Typography>
+                <Typography>
+                    {forecastInfo.date}
+                </Typography>
 
-                    </Typography>
-                    <Typography>
+                <Typography>
+                    {data.main.temp} °C
+                </Typography>
 
-                    </Typography>
-                    <Typography>
+                <Typography>
+                    {data.weather[0].description}
+                </Typography>
 
-                    </Typography>
-                </CardContent>
-            </Card>
-        </div>
+            </CardContent>
+        </Card>
     )
 }

@@ -9,22 +9,43 @@ export function useWeather() {
 
     function groupForecast(list) {
 
-    let groupedData = list.reduce((result, item) => {
+        let groupedData = list.reduce((result, item) => {
 
-        let date = item.dt_txt.split(" ")[0];
+            let date = item.dt_txt.split(" ")[0];
 
-        if(!result[date]){
-            result[date] = [];
-        }
+            if (!result[date]) {
+                result[date] = [];
+            }
 
-        result[date].push(item);
+            result[date].push(item);
 
-        return result;
+            return result;
 
-    }, {});
+        }, {});
 
-    return groupedData;
-}
+        return groupedData;
+    }
+
+    function getDailyForecast(groupedData) {
+        let dailyData = Object.keys(groupedData).map((date) => {
+
+            let dayData = groupedData[date];
+
+            let selectedData = dayData.find((item) => {
+                return item.dt_txt.includes("12:00:00")
+            });
+
+            if (!selectedData) {
+                selectedData = dayData[0];
+            }
+
+            return {
+                date,
+                weather: selectedData
+            }
+        });
+        return dailyData;
+    }
 
     let getWeatherInfo = async (city) => {
         try {
@@ -33,11 +54,11 @@ export function useWeather() {
 
             let data = await weatherApi(city);
             setWeatherData(data.current);
-           
-            let groupedForcast = groupForecast(data.forecast.list);
-            console.log(groupedForcast);
-            
-            setForecastData(groupedForcast);
+
+            let groupedForecast = groupForecast(data.forecast.list);
+            let dailyForecast = getDailyForecast(groupedForecast);
+
+            setForecastData(dailyForecast);
 
         } catch (err) {
             setError(err.message);
