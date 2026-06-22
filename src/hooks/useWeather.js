@@ -7,6 +7,25 @@ export function useWeather() {
     let [loading, setLoading] = useState(false);
     let [error, setError] = useState("")
 
+    function groupForecast(list) {
+
+    let groupedData = list.reduce((result, item) => {
+
+        let date = item.dt_txt.split(" ")[0];
+
+        if(!result[date]){
+            result[date] = [];
+        }
+
+        result[date].push(item);
+
+        return result;
+
+    }, {});
+
+    return groupedData;
+}
+
     let getWeatherInfo = async (city) => {
         try {
             setLoading(true);
@@ -14,7 +33,11 @@ export function useWeather() {
 
             let data = await weatherApi(city);
             setWeatherData(data.current);
-            setForecastData(data.forecast);
+           
+            let groupedForcast = groupForecast(data.forecast.list);
+            console.log(groupedForcast);
+            
+            setForecastData(groupedForcast);
 
         } catch (err) {
             setError(err.message);
