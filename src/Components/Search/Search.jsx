@@ -1,6 +1,4 @@
 import { useState } from 'react';
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
 
 export default function Search({ sendCity }) {
     let [city, setCity] = useState('');
@@ -11,33 +9,42 @@ export default function Search({ sendCity }) {
 
     let handleSubmit = (e) => {
         e.preventDefault();
-        sendCity(city);
+        if (!city.trim()) return;
+        sendCity(city.trim());
         setCity("");
     }
 
     return (
-        <div className="w-full max-w-sm sm:max-w-md bg-white/10 backdrop-blur-md rounded-2xl shadow-xl p-4 sm:p-6">
-            <h3 className="text-white text-base sm:text-lg font-medium mb-3 text-center">
-                Search for Weather
-            </h3>
-            <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3">
-                <TextField
-                    id="outlined-basic"
-                    label="City Name"
-                    variant="outlined"
-                    required
-                    value={city}
-                    onChange={handleInput}
-                    className="flex-1 [&_label]:!text-white/70 [&_label.Mui-focused]:!text-white [&_.MuiOutlinedInput-root]:!text-white [&_.MuiOutlinedInput-notchedOutline]:!border-white/30 [&_.MuiOutlinedInput-root:hover_.MuiOutlinedInput-notchedOutline]:!border-white/60 [&_.Mui-focused_.MuiOutlinedInput-notchedOutline]:!border-white"
-                />
-                <Button
-                    variant="contained"
-                    type="submit"
-                    className="!bg-white !text-purple-600 !font-semibold !rounded-lg !shadow-md hover:!bg-white/90 !px-6 !py-2 !normal-case transition-all"
-                >
-                    Search
-                </Button>
-            </form>
-        </div>
+        <form
+            onSubmit={handleSubmit}
+            className="flex w-full items-center gap-1 rounded-full border border-white/25 bg-white/10 p-1 pl-3 shadow-lg backdrop-blur-md transition-colors focus-within:border-white/50 focus-within:bg-white/15"
+        >
+            <svg
+                className="h-4 w-4 flex-shrink-0 text-white/60"
+                viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+                strokeLinecap="round" strokeLinejoin="round"
+            >
+                <circle cx="11" cy="11" r="7" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+
+            <input
+                type="text"
+                value={city}
+                onChange={handleInput}
+                placeholder="Search city…"
+                required
+                aria-label="Search city"
+                className="w-full min-w-0 flex-1 bg-transparent text-sm text-white placeholder-white/50 outline-none"
+            />
+
+            <button
+                type="submit"
+                aria-label="Search"
+                className="flex-shrink-0 rounded-full bg-white px-4 py-1.5 text-xs font-semibold text-slate-800 transition-all hover:bg-white/90 active:scale-95 focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent sm:text-sm"
+            >
+                Search
+            </button>
+        </form>
     )
 }
